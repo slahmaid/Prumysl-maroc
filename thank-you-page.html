@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شكراً لطلبك | Prumysl</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'YOUR_PIXEL_ID_HERE'); // ← REPLACE WITH YOUR ID
+    fbq('track', 'PageView');
+    fbq('track', 'Purchase', {currency: "MAD", value: 899.00}); // Standard event for conversion
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID_HERE&ev=PageView&noscript=1"
+    /></noscript>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; text-align: center; padding: 50px 20px; color: #333; }
+        .success-card { background: white; max-width: 500px; margin: 0 auto; padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .icon { font-size: 60px; color: #28a745; margin-bottom: 20px; }
+        h1 { font-weight: 900; color: #111; margin-bottom: 10px; }
+        p { font-size: 1.1rem; color: #555; line-height: 1.6; }
+        .details-box { background: #f0f7ff; border: 1px solid #d0e4ff; padding: 20px; border-radius: 16px; margin: 30px 0; text-align: right; }
+        .details-box div { margin-bottom: 8px; font-weight: 700; }
+        .details-box span { color: #202895; }
+        .home-btn { display: inline-block; background: #202895; color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none; font-weight: 800; transition: 0.3s; }
+        .home-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(32,40,149,0.2); }
+    </style>
+</head>
+<body>
+    <div class="success-card">
+        <div class="icon">✅</div>
+        <h1>شكراً <span id="cust-name">يا بطل</span>!</h1>
+        <p>تم استلام طلبك بنجاح. سنقوم بالاتصال بك قريباً جداً لتأكيد الشحن.</p>
+
+        <div class="details-box">
+            <div>المنتج: <span id="prod-val">...</span></div>
+            <div>النوع: <span id="conn-val">...</span></div>
+            <div>التوصيل: <span>مجاني 🚚</span></div>
+        </div>
+
+        <a href="MOKA-PRO-MAX.html" class="home-btn">العودة للرئيسية</a>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if(params.get('name')) document.getElementById('cust-name').innerText = params.get('name').split(' ')[0];
+        if(params.get('product')) {
+            const prod = params.get('product') === '1_camera' ? 'قطعة واحدة Moka Pro Max' : 'قطعتين Moka Pro Max';
+            document.getElementById('prod-val').innerText = prod;
+        }
+        if(params.get('connection')) document.getElementById('conn-val').innerText = params.get('connection');
+    </script>
+</body>
+</html>

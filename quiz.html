@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="استبيان تفاعلي يساعدك على اختيار الكاميرا الشمسية المثالية لعقارك خلال ثوانٍ." />
+  <title>اختيار الكاميرا الشمسية المثالية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #e5f0ff 0, #f5f5f7 55%, #e5e7eb 100%);
+      color: #111827;
+      direction: rtl;
+    }
+
+    header {
+      width: 100%;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #ffffff;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    header img {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+
+    main {
+      padding: 20px 14px 32px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      margin-bottom: 32px;
+      text-align: right;
+      position: relative;
+      padding: 24px 0;
+    }
+
+    .hero-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: #475569;
+      margin-bottom: 20px;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .hero-benefits {
+      list-style: none;
+      margin-bottom: 20px;
+      padding: 0;
+    }
+
+    .hero-benefits li {
+      font-size: 0.9rem;
+      color: #334155;
+      margin-bottom: 10px;
+      position: relative;
+      padding-right: 24px;
+      font-weight: 500;
+      line-height: 1.6;
+    }
+
+    .hero-benefits li::before {
+      content: "✓";
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22c55e, #10b981);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(34, 197, 94, 0.3);
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .badge {
+      font-size: 0.8rem;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(59, 130, 246, 0.08));
+      color: #1e40af;
+      border: 1.5px solid rgba(37, 99, 235, 0.25);
+      white-space: nowrap;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .badge:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.15);
+    }
+
+    .quiz-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px 12px 14px;
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.18);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    @media (min-width: 640px) {
+      main {
+        padding: 28px 20px 40px;
+      }
+
+      header {
+        padding: 14px 0;
+      }
+
+      header img {
+        height: 36px;
+      }
+
+      .hero {
+        margin-bottom: 40px;
+        padding: 32px 0;
+      }
+
+      .hero-title {
+        font-size: 2.2rem;
+        margin-bottom: 18px;
+        line-height: 1.2;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 24px;
+      }
+
+      .hero-benefits li {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+      }
+
+      .badge {
+        font-size: 0.85rem;
+        padding: 7px 16px;
+      }
+
+      .quiz-card {
+        padding: 24px 24px 20px;
+        border-radius: 20px;
+      }
+    }
+
+    .progress-container {
+      margin-bottom: 18px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 33.33%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #f97316, #facc15, #22c55e);
+      transition: width 0.25s ease;
+    }
+
+    .progress-labels {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .progress-count {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .question-step {
+      display: none;
+    }
+
+    .question-step.active {
+      display: block;
+    }
+
+    .question-header {
+      margin-bottom: 24px;
+    }
+
+    .question-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .question-subtitle {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr)); /* 2 per row on mobile */
+      gap: 12px;
+    }
+
+    @media (min-width: 768px) {
+      .options-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 per row on larger screens */
+        gap: 16px;
+      }
+    }
+
+    .option-card {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        outline-color 0.18s ease;
+      border: 1.5px solid rgba(148, 163, 184, 0.35);
+      background: radial-gradient(circle at top left, #e5f0ff 0, #f9fafb 45%, #f3f4f6 100%);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+    }
+
+    .option-card-inner {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 8px 10px;
+      height: 100%;
+    }
+
+    /* Custom radio visual in top-left of each card */
+    .option-card-inner::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid rgba(148, 163, 184, 0.9);
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18);
+    }
+
+    input[type="radio"]:checked + label .option-card-inner::before {
+      border-color: #2563eb;
+      background: radial-gradient(circle at center, #2563eb 0, #1d4ed8 40%, #0f172a 100%);
+      box-shadow: 0 0 0 2px rgba(191, 219, 254, 0.9);
+    }
+
+    .option-media {
+      width: 100%;
+      aspect-ratio: 1 / 1; /* 1:1 image box */
+      border-radius: 14px;
+      background: radial-gradient(circle at top, #e0f2fe 0, #eff6ff 45%, #f9fafb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      color: #1e293b;
+      font-size: 0.85rem;
+      font-weight: 600;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.35);
+    }
+
+    .option-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .option-label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-align: center;
+      color: #0f172a;
+      margin-bottom: 2px;
+    }
+
+    .option-helper {
+      font-size: 0.72rem;
+      text-align: center;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    input[type="radio"]:focus-visible + label .option-card {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    input[type="radio"]:checked + label .option-card {
+      border-color: #2563eb;
+      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.35);
+      transform: translateY(-5px);
+      background: radial-gradient(circle at top left, #dbeafe 0, #eef2ff 40%, #e0f2fe 100%);
+      outline: 2px solid rgba(191, 219, 254, 0.9);
+      outline-offset: 0;
+    }
+
+    .option-card:hover {
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.18);
+      transform: translateY(-4px);
+      border-color: rgba(59, 130, 246, 0.45);
+      background: radial-gradient(circle at top left, #e0f2fe 0, #eff6ff 40%, #f1f5f9 100%);
+    }
+
+    .trust-strip {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      color: #4b5563;
+    }
+
+    .trust-item {
+      white-space: nowrap;
+    }
+
+    .trust-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="img/logo.svg" alt="Logo" />
+  </header>
+  <main>
+    <div class="hero">
+      <h1 class="hero-title">اكتشف أفضل كاميرا مراقبة شمسية لعقارك في أقل من 30 ثانية</h1>
+      <p class="hero-subtitle">أجب عن 4 أسئلة سريعة وسنوجهك مباشرة إلى المنتج الأنسب لنوع عقارك وطريقة استخدامك، بدون تعقيد أو مصطلحات فنية.</p>
+      <ul class="hero-benefits">
+        <li>توصيات مختلفة للفلل، المزارع، الأراضي الفارغة ومناطق الإنشاء.</li>
+        <li>تغطية من بوابة صغيرة حتى مساحات شاسعة وتفاصيل بعيدة.</li>
+        <li>بدون تسجيل أو إدخال بيانات شخصية – ابدأ مباشرة.</li>
+      </ul>
+      <div class="hero-badges">
+        <span class="badge">مجاني 100٪</span>
+        <span class="badge">يعتمد على سيناريوهات حقيقية لمالكي عقارات</span>
+        <span class="badge">مصمم لتقليل إهدار المال على كاميرا غير مناسبة</span>
+      </div>
+    </div>
+
+    <section aria-label="استبيان اختيار الكاميرا الشمسية">
+      <div class="quiz-card">
+        <div class="progress-container" aria-hidden="true">
+          <div class="progress-track">
+            <div class="progress-fill"></div>
+          </div>
+          <div class="progress-labels">
+            <span class="progress-text">تقدمك في الاختبار</span>
+            <span class="progress-count"><span data-progress-current>1</span> / 4</span>
+          </div>
+        </div>
+
+        <form id="solar-camera-form">
+          <div class="question-step active" data-step="1">
+          <div class="question-header">
+            <p class="question-subtitle">الخطوة 1 من 4</p>
+            <h1 class="question-title">ما نوع العقار الذي تملكه؟</h1>
+            <p class="question-subtitle">اختر نوع العقار لمساعدتنا في ترشيح الكاميرا الشمسية الأنسب لك.</p>
+          </div>
+
+          <div class="options-grid">
+            <div>
+              <input type="radio" name="propertyType" id="villa" value="villa" />
+              <label for="villa">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 1/Villa.jpg" alt="فيلا" loading="lazy" />
+                    </div>
+                    <div class="option-label">فيلا</div>
+                    <div class="option-helper">منزل مستقل أو قصر</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="propertyType" id="farm" value="farm" />
+              <label for="farm">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 1/Farm.jpg" alt="مزرعة" loading="lazy" />
+                    </div>
+                    <div class="option-label">مزرعة</div>
+                    <div class="option-helper">حظيرة، مزرعة، استراحة ريفية</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="propertyType" id="empty-land" value="empty_land" />
+              <label for="empty-land">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 1/Empty-land.jpg" alt="أرض فارغة" loading="lazy" />
+                    </div>
+                    <div class="option-label">أرض فارغة</div>
+                    <div class="option-helper">أرض بدون مباني حالياً</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="propertyType" id="construction" value="construction_area" />
+              <label for="construction">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 1/Construction.jpg" alt="منطقة إنشاءات" loading="lazy" />
+                    </div>
+                    <div class="option-label">منطقة إنشاءات</div>
+                    <div class="option-helper">مشروع تحت الإنشاء أو موقع عمل</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          </div>
+
+          <div class="question-step" data-step="2">
+          <div class="question-header">
+            <p class="question-subtitle">الخطوة 2 من 4</p>
+            <h1 class="question-title">ما هي المساحة التي تريد تغطيتها؟</h1>
+            <p class="question-subtitle">اختر أقرب وصف لمساحة التغطية المطلوبة.</p>
+          </div>
+
+          <div class="options-grid">
+            <div>
+              <input type="radio" name="coverageArea" id="small-area" value="small_area" />
+              <label for="small-area">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 2/small area.jpg" alt="بوابة واحدة أو مساحة صغيرة" loading="lazy" />
+                    </div>
+                    <div class="option-label">مساحة صغيرة</div>
+                    <div class="option-helper">بوابة واحدة أو مدخل جراج صغير</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="coverageArea" id="medium-area" value="medium_area" />
+              <label for="medium-area">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 2/medium area.jpg" alt="حديقة كبيرة أو واجهتان" loading="lazy" />
+                    </div>
+                    <div class="option-label">مساحة متوسطة إلى كبيرة</div>
+                    <div class="option-helper">حديقة واسعة أو واجهتان في نفس الوقت</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="coverageArea" id="large-area" value="large_area" />
+              <label for="large-area">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 2/large area.jpg" alt="مساحة واسعة جداً" loading="lazy" />
+                    </div>
+                    <div class="option-label">مساحة شاسعة وتفاصيل بعيدة</div>
+                    <div class="option-helper">أشخاص / لوحات سيارات على مسافات بعيدة جداً</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          </div>
+
+          <div class="question-step" data-step="3">
+          <div class="question-header">
+            <p class="question-subtitle">الخطوة 3 من 4</p>
+            <h1 class="question-title">كيف تريد التحكم في زوايا التصوير؟</h1>
+            <p class="question-subtitle">اختر الطريقة الأنسب لطريقة متابعتك للمكان.</p>
+          </div>
+
+          <div class="options-grid">
+            <div>
+              <input type="radio" name="angleControl" id="angle-fixed-plus-moving" value="fixed_plus_moving" />
+              <label for="angle-fixed-plus-moving">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 3/3 screens at once.jpg" alt="3 شاشات في نفس الوقت" loading="lazy" />
+                    </div>
+                    <div class="option-label">3 زوايا (ثابتة + متحركة)</div>
+                    <div class="option-helper">أريد مشاهدة ٣ شاشات معاً: زوايا ثابتة + واحدة تتحرك.</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="angleControl" id="angle-full-control" value="full_control" />
+              <label for="angle-full-control">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 3/Full freedom to move 3 cameras.jpg" alt="تحكم حر في 3 كاميرات" loading="lazy" />
+                    </div>
+                    <div class="option-label">تحكم كامل في الزوايا</div>
+                    <div class="option-helper">أريد تحريك كل كاميرا بحرية تامة في اتجاه مختلف.</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          </div>
+
+          <div class="question-step" data-step="4">
+          <div class="question-header">
+            <p class="question-subtitle">الخطوة 4 من 4</p>
+            <h1 class="question-title">كيف تفضّل الاتصال بالإنترنت؟</h1>
+            <p class="question-subtitle">معظم كاميراتنا تعمل عبر 4G (شريحة اتصال)، بينما بعض الموديلات تتيح أيضاً الاتصال عبر Wi‑Fi.</p>
+          </div>
+
+          <div class="options-grid">
+            <div>
+              <input type="radio" name="connectivity" id="connect-4g" value="4g" />
+              <label for="connect-4g">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 4/4g.jpg" alt="كاميرا تعمل عبر 4G / شريحة اتصال" loading="lazy" />
+                    </div>
+                    <div class="option-label">اتصال عبر 4G</div>
+                    <div class="option-helper">للأماكن البعيدة أو التي لا يتوفر بها واي فاي ثابت.</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" name="connectivity" id="connect-wifi" value="wifi" />
+              <label for="connect-wifi">
+                <div class="option-card">
+                  <div class="option-card-inner">
+                    <div class="option-media">
+                      <img src="Question 4/wifi.jpg" alt="كاميرا تعمل عبر شبكة Wi‑Fi" loading="lazy" />
+                    </div>
+                    <div class="option-label">اتصال عبر Wi‑Fi</div>
+                    <div class="option-helper">مناسب إن كان العقار مغطى بشبكة واي فاي مستقرة.</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="trust-strip" aria-label="عناصر ثقة وطمأنة للعميل">
+        <span class="trust-item">لا نطلب بطاقات بنكية أو تسجيل.</span>
+        <span class="trust-dot"></span>
+        <span class="trust-item">مناسب لمالكي العقارات في المغرب.</span>
+        <span class="trust-dot"></span>
+        <span class="trust-item">مصمم لمساعدتك على اتخاذ قرار أسرع بثقة أعلى.</span>
+      </div>
+    </section>
+  </main>
+
+  <noscript>
+    <div style="margin: 16px; padding: 12px 16px; border-radius: 12px; background:#fee2e2; color:#991b1b; text-align:center;">
+      هذا النموذج يحتاج لتفعيل الجافاسكريبت في المتصفح حتى يعمل بشكل صحيح.
+    </div>
+  </noscript>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const steps = Array.from(document.querySelectorAll(".question-step"));
+      const totalSteps = 4;
+      const progressFill = document.querySelector(".progress-fill");
+      const progressCurrent = document.querySelector("[data-progress-current]");
+      let redirectTimeout = null;
+      let pendingRedirectUrl = null;
+
+      function setProgress(stepNumber) {
+        if (!progressFill || !progressCurrent) return;
+        const clamped = Math.min(Math.max(stepNumber, 1), totalSteps);
+        const percentage = (clamped / totalSteps) * 100;
+        progressFill.style.width = percentage + "%";
+        progressCurrent.textContent = clamped;
+      }
+
+      function goToStep(stepNumber) {
+        steps.forEach((step) => {
+          step.classList.toggle("active", step.dataset.step === String(stepNumber));
+        });
+      }
+
+      function getSelectedValue(name) {
+        const checked = document.querySelector('input[name="' + name + '"]:checked');
+        return checked ? checked.value : null;
+      }
+
+      function scheduleRedirect(url) {
+        if (!url) return;
+        if (redirectTimeout) {
+          clearTimeout(redirectTimeout);
+        }
+        redirectTimeout = setTimeout(function () {
+          window.location.href = url;
+        }, 500);
+      }
+
+      function updateQuizFlow(triggerRedirect) {
+        const propertyType = getSelectedValue("propertyType");
+        const coverageArea = getSelectedValue("coverageArea");
+        const angleControl = getSelectedValue("angleControl");
+
+        // Default: show step 1
+        let stepToShow = 1;
+
+        // Step 1 → Step 2 when property type is chosen
+        if (propertyType) {
+          stepToShow = 2;
+        }
+
+        // Step 2 logic (including direct outs) when coverage area chosen
+        if (coverageArea) {
+          // By default keep user on step 2 unless it's clearly a step-3 case
+          stepToShow = coverageArea === "medium_area" ? 3 : 2;
+
+          if (triggerRedirect) {
+            // Special case: Villa + Small Area → MOKA PRO MAX (needs connectivity question)
+            if (coverageArea === "small_area") {
+              if (propertyType === "villa") {
+                pendingRedirectUrl = "https://prumysl.cc/MOKA-PRO-MAX";
+              } else {
+                pendingRedirectUrl = "https://prumysl.cc/moka.html";
+              }
+              stepToShow = 4; // Show connectivity question
+            } else if (coverageArea === "large_area") {
+              // Large area redirects immediately without connectivity question
+              scheduleRedirect("https://prumysl.cc/saqr.html");
+              return;
+            }
+            // If medium_area, continue to step 3 (no redirect here yet)
+          }
+        }
+
+        // Step 3 logic (decide final product) when angle control chosen
+        if (angleControl && triggerRedirect && !pendingRedirectUrl) {
+          if (angleControl === "fixed_plus_moving") {
+            // Redirect immediately without connectivity question
+            scheduleRedirect("https://prumysl.cc/assas.html");
+            return;
+          } else if (angleControl === "full_control") {
+            // Redirect immediately without connectivity question
+            scheduleRedirect("https://prumysl.cc/garde-corps.html");
+            return;
+          }
+        }
+
+        // Update visual progress as soon as we know the step
+        setProgress(stepToShow);
+
+        // Apply the decided step
+        goToStep(stepToShow);
+      }
+
+      // Attach listeners for all quiz radios, using centralized logic
+      ["propertyType", "coverageArea", "angleControl"].forEach(function (name) {
+        const radios = document.querySelectorAll('input[name="' + name + '"]');
+        radios.forEach(function (radio) {
+          radio.addEventListener("change", function () {
+            updateQuizFlow(true);
+          });
+        });
+      });
+
+      // Connectivity step: once user chooses 4G or Wi‑Fi, perform the pending redirect
+      const connectivityRadios = document.querySelectorAll('input[name="connectivity"]');
+      connectivityRadios.forEach(function (radio) {
+        radio.addEventListener("change", function () {
+          if (pendingRedirectUrl) {
+            scheduleRedirect(pendingRedirectUrl);
+          }
+        });
+      });
+
+      // On initial load (including browser Back), restore the correct step
+      // without triggering any redirects.
+      updateQuizFlow(false);
+
+      // Ensure initial progress is in sync on first paint
+      setProgress(1);
+    });
+  </script>
+</body>
+</html>
