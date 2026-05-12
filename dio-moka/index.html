@@ -75,7 +75,7 @@
                 <h3 class="step-title">1. معلومات التوصيل:</h3>
                 <div class="input-group">
                     <label for="fullname-top">الاسم الكامل</label>
-                    <input type="text" id="fullname-top" name="fullname" placeholder="أدخل اسمك هنا..." required>
+                    <input type="text" id="fullname-top" name="fullname" placeholder="أدخل اسمك هنا...">
                 </div>
                 <div class="input-group">
                     <label for="phone-top">رقم الهاتف</label>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="input-group">
                     <label for="city-top">المدينة</label>
-                    <input type="text" id="city-top" name="city" placeholder="الدار البيضاء، الرباط..." required>
+                    <input type="text" id="city-top" name="city" placeholder="الدار البيضاء، الرباط...">
                 </div>
 
                 <button type="submit" class="btn-submit">تأكيد الطلب الآن (الدفع عند الاستلام)</button>
@@ -235,7 +235,7 @@
                 <h3 class="step-title">1. معلومات التوصيل:</h3>
                 <div class="input-group">
                     <label for="fullname">الاسم الكامل</label>
-                    <input type="text" id="fullname" name="fullname" placeholder="أدخل اسمك هنا..." required>
+                    <input type="text" id="fullname" name="fullname" placeholder="أدخل اسمك هنا...">
                 </div>
                 <div class="input-group">
                     <label for="phone">رقم الهاتف</label>
@@ -243,7 +243,7 @@
                 </div>
                 <div class="input-group">
                     <label for="city">المدينة</label>
-                    <input type="text" id="city" name="city" placeholder="الدار البيضاء، الرباط..." required>
+                    <input type="text" id="city" name="city" placeholder="الدار البيضاء، الرباط...">
                 </div>
 
                 <button type="submit" class="btn-submit">تأكيد الطلب الآن (الدفع عند الاستلام)</button>
@@ -383,7 +383,17 @@
 
             fetch(scriptURL, { method: 'POST', body: requestBody })
                 .then(response => {
-                    // REDIRECT TO THANK YOU PAGE WITH DATA
+                    const priceByProduct = { 'Moka Smart': 599, 'Duo Moka': 699, 'Assas 4G': 889, 'Garde Corps 4G': 1199, 'Saqr 36X': 1899 };
+                    const checkoutValue = priceByProduct[productName] || 599;
+                    if (typeof fbq !== 'undefined') {
+                        fbq('track', 'InitiateCheckout', {
+                            content_type: 'product',
+                            content_ids: [String(productName)],
+                            currency: 'MAD',
+                            value: checkoutValue,
+                            num_items: 1
+                        });
+                    }
                     window.location.href = `/thank-you/?product=${encodeURIComponent(productName)}&name=${encodeURIComponent(customerName)}`;
                 })
                 .catch(error => {
