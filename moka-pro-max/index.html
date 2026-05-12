@@ -1306,6 +1306,30 @@
             });
         });
 
+        // Meta Pixel: InitiateCheckout once per form when user focuses name / city / phone
+        document.querySelectorAll('form.order-form').forEach(form => {
+            form.addEventListener('focusin', (e) => {
+                const t = e.target;
+                if (!t || t.tagName !== 'INPUT') return;
+                const field = t.getAttribute('name');
+                if (field !== 'name' && field !== 'city' && field !== 'phone') return;
+                if (form.dataset.fbqInitiateCheckout === '1') return;
+                form.dataset.fbqInitiateCheckout = '1';
+                if (typeof fbq === 'undefined') return;
+                const offerInput = form.querySelector('input[name="product_offer"]');
+                const offer = (offerInput && offerInput.value) || '1_camera';
+                const numItems = offer === '2_camera' ? 2 : 1;
+                const unitPrice = 699;
+                fbq('track', 'InitiateCheckout', {
+                    content_type: 'product',
+                    content_ids: ['MOKA-PRO-MAX'],
+                    currency: 'MAD',
+                    value: unitPrice * numItems,
+                    num_items: numItems
+                });
+            });
+        });
+
         const forms = document.querySelectorAll('form');
         forms.forEach(form => {
             form.addEventListener('submit', e => {
@@ -1343,16 +1367,6 @@
                     })
                     .finally(() => {
                         if (typeof fbq !== 'undefined') {
-                            const offer = formData.get('product_offer') || '1_camera';
-                            const numItems = offer === '2_camera' ? 2 : 1;
-                            const unitPrice = 699;
-                            fbq('track', 'InitiateCheckout', {
-                                content_type: 'product',
-                                content_ids: ['MOKA-PRO-MAX'],
-                                currency: 'MAD',
-                                value: unitPrice * numItems,
-                                num_items: numItems
-                            });
                             fbq('track', 'Lead');
                         }
                         window.location.href = redirectUrl;
