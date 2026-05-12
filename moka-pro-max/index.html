@@ -1270,6 +1270,43 @@
         // CONFIG
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyJ7pSNQtwNVKgSAz92JIMu-PZq7ffBoapou5FEQTo2W-t4Cq_chqSyCFe1HBODA4/exec";
 
+        // TikTok Pixel helpers (Moka Pro Max)
+        const MOKA_TT_CONTENT_ID = 'MOKA-PRO-MAX';
+        const MOKA_TT_CONTENT_NAME = 'Prumysl Moka Pro Max';
+        const MOKA_TT_UNIT_PRICE = 699;
+        const MOKA_TT_CURRENCY = 'MAD';
+
+        function mokaTikTokOfferFromForm(form) {
+            const offerInput = form.querySelector('input[name="product_offer"]');
+            const offer = (offerInput && offerInput.value) || '1_camera';
+            const numItems = offer === '2_camera' ? 2 : 1;
+            const value = MOKA_TT_UNIT_PRICE * numItems;
+            const contents = [{
+                content_id: MOKA_TT_CONTENT_ID,
+                content_type: 'product',
+                content_name: MOKA_TT_CONTENT_NAME
+            }];
+            return { contents, value, currency: MOKA_TT_CURRENCY, numItems };
+        }
+
+        function mokaTikTokNormalizeMaPhone(digits) {
+            const d = String(digits || '').replace(/\D/g, '');
+            if (d.length !== 10 || d[0] !== '0') return null;
+            return '212' + d.slice(1);
+        }
+
+        async function mokaTikTokSha256HexUtf8(str) {
+            if (!str || !window.crypto || !crypto.subtle) return null;
+            const buf = new TextEncoder().encode(str);
+            const hash = await crypto.subtle.digest('SHA-256', buf);
+            return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        function mokaTikTokReady(fn) {
+            if (typeof ttq === 'undefined') return;
+            ttq.ready(fn);
+        }
+
         // FAQ Accordion logic
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
@@ -1319,11 +1356,26 @@
             if (!row) return;
             row.querySelectorAll('a.contact-quick-btn').forEach((link) => {
                 link.addEventListener('click', () => {
-                    if (typeof fbq === 'undefined') return;
                     const channel = link.classList.contains('contact-quick-btn--call') ? 'phone' : 'whatsapp';
-                    fbq('trackCustom', 'QuickContactStripClick', {
-                        content_category: channel,
-                        content_name: 'header_to_hero_strip'
+                    if (typeof fbq !== 'undefined') {
+                        fbq('trackCustom', 'QuickContactStripClick', {
+                            content_category: channel,
+                            content_name: 'header_to_hero_strip'
+                        });
+                    }
+                    mokaTikTokReady(() => {
+                        const contentName = channel === 'phone'
+                            ? 'header_to_hero_call'
+                            : 'header_to_hero_whatsapp';
+                        ttq.track('Contact', {
+                            contents: [{
+                                content_id: MOKA_TT_CONTENT_ID,
+                                content_type: 'product',
+                                content_name: contentName
+                            }],
+                            value: 0,
+                            currency: MOKA_TT_CURRENCY
+                        });
                     });
                 });
             });
@@ -1337,26 +1389,35 @@
             });
         });
 
-        // Meta Pixel: InitiateCheckout once per form when user focuses name / city / phone
+        // Meta + TikTok: InitiateCheckout once per form when user focuses name / city / phone
         document.querySelectorAll('form.order-form').forEach(form => {
             form.addEventListener('focusin', (e) => {
                 const t = e.target;
                 if (!t || t.tagName !== 'INPUT') return;
                 const field = t.getAttribute('name');
                 if (field !== 'name' && field !== 'city' && field !== 'phone') return;
-                if (form.dataset.fbqInitiateCheckout === '1') return;
-                form.dataset.fbqInitiateCheckout = '1';
-                if (typeof fbq === 'undefined') return;
+                if (form.dataset.checkoutIntentTracked === '1') return;
+                form.dataset.checkoutIntentTracked = '1';
                 const offerInput = form.querySelector('input[name="product_offer"]');
                 const offer = (offerInput && offerInput.value) || '1_camera';
                 const numItems = offer === '2_camera' ? 2 : 1;
                 const unitPrice = 699;
-                fbq('track', 'InitiateCheckout', {
-                    content_type: 'product',
-                    content_ids: ['MOKA-PRO-MAX'],
-                    currency: 'MAD',
-                    value: unitPrice * numItems,
-                    num_items: numItems
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'InitiateCheckout', {
+                        content_type: 'product',
+                        content_ids: ['MOKA-PRO-MAX'],
+                        currency: 'MAD',
+                        value: unitPrice * numItems,
+                        num_items: numItems
+                    });
+                }
+                mokaTikTokReady(() => {
+                    const p = mokaTikTokOfferFromForm(form);
+                    ttq.track('InitiateCheckout', {
+                        contents: p.contents,
+                        value: p.value,
+                        currency: p.currency
+                    });
                 });
             });
         });
@@ -1397,10 +1458,51 @@
                         console.warn('Submit request timeout/error:', error?.message || error);
                     })
                     .finally(() => {
-                        if (typeof fbq !== 'undefined') {
-                            fbq('track', 'Lead');
+                        let redirected = false;
+                        const finishRedirectOnce = () => {
+                            if (redirected) return;
+                            redirected = true;
+                            if (typeof fbq !== 'undefined') {
+                                fbq('track', 'Lead');
+                            }
+                            window.location.href = redirectUrl;
+                        };
+                        const p = mokaTikTokOfferFromForm(form);
+                        if (typeof ttq === 'undefined') {
+                            finishRedirectOnce();
+                            return;
                         }
-                        window.location.href = redirectUrl;
+                        const safetyTimer = setTimeout(finishRedirectOnce, 3500);
+                        mokaTikTokReady(() => {
+                            Promise.resolve()
+                                .then(async () => {
+                                    const normalized = mokaTikTokNormalizeMaPhone(cleanPhone);
+                                    if (normalized) {
+                                        const phoneHash = await mokaTikTokSha256HexUtf8(normalized);
+                                        const externalIdHash = await mokaTikTokSha256HexUtf8(
+                                            'prumysl-moka-pro-max|' + normalized
+                                        );
+                                        if (phoneHash && externalIdHash) {
+                                            ttq.identify({
+                                                phone_number: phoneHash,
+                                                external_id: externalIdHash
+                                            });
+                                        }
+                                    }
+                                    ttq.track('Purchase', {
+                                        contents: p.contents,
+                                        value: p.value,
+                                        currency: p.currency
+                                    });
+                                })
+                                .catch((err) => {
+                                    console.warn('TikTok Purchase / identify:', err?.message || err);
+                                })
+                                .finally(() => {
+                                    clearTimeout(safetyTimer);
+                                    setTimeout(finishRedirectOnce, 400);
+                                });
+                        });
                     });
             });
         });
