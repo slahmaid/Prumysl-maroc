@@ -194,8 +194,7 @@
         }
 
         // Meta + TikTok Purchase (once per thank-you visit with order context)
-        if (product) {
-            const pp = thankYouPurchasePayload(product);
+        function thankYouFirePurchasePixels(pp) {
             if (typeof fbq !== 'undefined') {
                 fbq('track', 'Purchase', {
                     content_type: 'product',
@@ -205,17 +204,33 @@
                     num_items: pp.numItems
                 });
             }
-            if (typeof ttq !== 'undefined') {
-                ttq.ready(function () {
-                    ttq.track('Purchase', {
-                        contents: [{
-                            content_id: pp.contentId,
-                            content_type: 'product',
-                            content_name: pp.contentName
-                        }],
-                        value: pp.value,
-                        currency: pp.currency
-                    });
+            if (typeof ttq === 'undefined') return;
+            function tikTokPurchase() {
+                ttq.track('Purchase', {
+                    contents: [{
+                        content_id: pp.contentId,
+                        content_type: 'product',
+                        content_name: pp.contentName
+                    }],
+                    value: pp.value,
+                    currency: pp.currency
+                });
+            }
+            if (typeof ttq.ready === 'function') {
+                ttq.ready(tikTokPurchase);
+            } else {
+                tikTokPurchase();
+            }
+        }
+
+        if (product) {
+            const pp = thankYouPurchasePayload(product);
+            if (document.readyState === 'complete') {
+                thankYouFirePurchasePixels(pp);
+            } else {
+                window.addEventListener('load', function onThankYouLoad() {
+                    window.removeEventListener('load', onThankYouLoad);
+                    thankYouFirePurchasePixels(pp);
                 });
             }
         }
