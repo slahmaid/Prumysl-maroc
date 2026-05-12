@@ -188,6 +188,14 @@
             };
         }
 
+        function thankYouTtqContents(pp) {
+            return [{
+                content_id: pp.contentId,
+                content_type: 'product',
+                content_name: pp.contentName
+            }];
+        }
+
         // Update the page content dynamically
         if (product) {
             document.getElementById('product-name').textContent = product;
@@ -198,7 +206,7 @@
             document.getElementById('customer-name').textContent = firstName;
         }
 
-        // Meta + TikTok: Purchase when ?product= is present
+        // Meta + TikTok (identify before conversion events when hashes exist in sessionStorage)
         if (product) {
             const pp = thankYouPurchasePayload(product);
             if (typeof fbq !== 'undefined') {
@@ -212,12 +220,30 @@
             }
             if (typeof ttq !== 'undefined' && typeof ttq.ready === 'function') {
                 ttq.ready(function () {
+                    try {
+                        const idRaw = sessionStorage.getItem('prumysl_ttq_ident');
+                        if (idRaw) {
+                            const o = JSON.parse(idRaw);
+                            ttq.identify({
+                                phone_number: o.phone_number,
+                                external_id: o.external_id
+                            });
+                            sessionStorage.removeItem('prumysl_ttq_ident');
+                        }
+                    } catch (_) {}
+                    const c = thankYouTtqContents(pp);
+                    ttq.track('ViewContent', {
+                        contents: c,
+                        value: pp.value,
+                        currency: pp.currency
+                    });
+                    ttq.track('AddPaymentInfo', {
+                        contents: c,
+                        value: pp.value,
+                        currency: pp.currency
+                    });
                     ttq.track('Purchase', {
-                        contents: [{
-                            content_id: pp.contentId,
-                            content_type: 'product',
-                            content_name: pp.contentName
-                        }],
+                        contents: c,
                         value: pp.value,
                         currency: pp.currency
                     });

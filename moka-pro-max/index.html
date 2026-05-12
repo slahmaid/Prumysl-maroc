@@ -1272,6 +1272,51 @@
         // CONFIG
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyJ7pSNQtwNVKgSAz92JIMu-PZq7ffBoapou5FEQTo2W-t4Cq_chqSyCFe1HBODA4/exec";
 
+        const MOKA_TTQ_CONTENT_ID = 'MOKA-PRO-MAX';
+        const MOKA_TTQ_CONTENT_NAME = 'Prumysl Moka Pro Max';
+        const MOKA_TTQ_UNIT = 699;
+        const MOKA_TTQ_CUR = 'MAD';
+
+        function mokaTtqContentsPayload(offer) {
+            const o = offer || '1_camera';
+            const numItems = o === '2_camera' ? 2 : 1;
+            const value = MOKA_TTQ_UNIT * numItems;
+            return {
+                contents: [{ content_id: MOKA_TTQ_CONTENT_ID, content_type: 'product', content_name: MOKA_TTQ_CONTENT_NAME }],
+                value: value,
+                currency: MOKA_TTQ_CUR,
+                numItems: numItems
+            };
+        }
+
+        function mokaTtqReady(fn) {
+            if (typeof ttq !== 'undefined' && typeof ttq.ready === 'function') ttq.ready(fn);
+        }
+
+        function mokaTtqNormMaPhone(digits) {
+            const d = String(digits || '').replace(/\D/g, '');
+            if (d.length !== 10 || d[0] !== '0') return null;
+            return '212' + d.slice(1);
+        }
+
+        async function mokaTtqSha256HexUtf8(str) {
+            if (!str || !window.crypto || !crypto.subtle) return null;
+            const buf = new TextEncoder().encode(str);
+            const hash = await crypto.subtle.digest('SHA-256', buf);
+            return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        mokaTtqReady(function () {
+            const el = document.querySelector('form.order-form input[name="product_offer"]');
+            const offer = (el && el.value) || '1_camera';
+            const p = mokaTtqContentsPayload(offer);
+            ttq.track('ViewContent', {
+                contents: p.contents,
+                value: p.value,
+                currency: p.currency
+            });
+        });
+
         // FAQ Accordion logic
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
@@ -1362,6 +1407,19 @@
                         num_items: numItems
                     });
                 }
+                mokaTtqReady(function () {
+                    const p = mokaTtqContentsPayload(offer);
+                    ttq.track('InitiateCheckout', {
+                        contents: p.contents,
+                        value: p.value,
+                        currency: p.currency
+                    });
+                    ttq.track('AddToCart', {
+                        contents: p.contents,
+                        value: p.value,
+                        currency: p.currency
+                    });
+                });
             });
         });
 
@@ -1404,7 +1462,48 @@
                         if (typeof fbq !== 'undefined') {
                             fbq('track', 'Lead');
                         }
-                        window.location.href = redirectUrl;
+                        let redirected = false;
+                        let safety = null;
+                        const go = () => {
+                            if (redirected) return;
+                            redirected = true;
+                            if (safety) clearTimeout(safety);
+                            window.location.href = redirectUrl;
+                        };
+                        const p = mokaTtqContentsPayload(product);
+                        if (typeof ttq === 'undefined' || typeof ttq.ready !== 'function') {
+                            go();
+                            return;
+                        }
+                        safety = setTimeout(go, 3500);
+                        mokaTtqReady(function () {
+                            Promise.resolve()
+                                .then(async () => {
+                                    const norm = mokaTtqNormMaPhone(cleanPhone);
+                                    if (norm) {
+                                        const phoneHash = await mokaTtqSha256HexUtf8(norm);
+                                        const extHash = await mokaTtqSha256HexUtf8('prumysl-moka-pro-max|' + norm);
+                                        if (phoneHash && extHash) {
+                                            try {
+                                                sessionStorage.setItem('prumysl_ttq_ident', JSON.stringify({
+                                                    phone_number: phoneHash,
+                                                    external_id: extHash
+                                                }));
+                                            } catch (_) {}
+                                        }
+                                    }
+                                    ttq.track('PlaceAnOrder', {
+                                        contents: p.contents,
+                                        value: p.value,
+                                        currency: p.currency
+                                    });
+                                })
+                                .catch(function () {})
+                                .finally(function () {
+                                    clearTimeout(safety);
+                                    setTimeout(go, 400);
+                                });
+                        });
                     });
             });
         });
