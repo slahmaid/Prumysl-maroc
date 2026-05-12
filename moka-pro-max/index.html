@@ -1289,19 +1289,6 @@
             return { contents, value, currency: MOKA_TT_CURRENCY, numItems };
         }
 
-        function mokaTikTokNormalizeMaPhone(digits) {
-            const d = String(digits || '').replace(/\D/g, '');
-            if (d.length !== 10 || d[0] !== '0') return null;
-            return '212' + d.slice(1);
-        }
-
-        async function mokaTikTokSha256HexUtf8(str) {
-            if (!str || !window.crypto || !crypto.subtle) return null;
-            const buf = new TextEncoder().encode(str);
-            const hash = await crypto.subtle.digest('SHA-256', buf);
-            return Array.from(new Uint8Array(hash)).map((b) => b.toString(16).padStart(2, '0')).join('');
-        }
-
         function mokaTikTokReady(fn) {
             if (typeof ttq === 'undefined') return;
             ttq.ready(fn);
@@ -1458,58 +1445,10 @@
                         console.warn('Submit request timeout/error:', error?.message || error);
                     })
                     .finally(() => {
-                        let redirected = false;
-                        const p = mokaTikTokOfferFromForm(form);
-                        const finishRedirectOnce = () => {
-                            if (redirected) return;
-                            redirected = true;
-                            if (typeof fbq !== 'undefined') {
-                                fbq('track', 'Purchase', {
-                                    content_type: 'product',
-                                    content_ids: ['MOKA-PRO-MAX'],
-                                    currency: p.currency,
-                                    value: p.value,
-                                    num_items: p.numItems
-                                });
-                                fbq('track', 'Lead');
-                            }
-                            window.location.href = redirectUrl;
-                        };
-                        if (typeof ttq === 'undefined') {
-                            finishRedirectOnce();
-                            return;
+                        if (typeof fbq !== 'undefined') {
+                            fbq('track', 'Lead');
                         }
-                        const safetyTimer = setTimeout(finishRedirectOnce, 3500);
-                        mokaTikTokReady(() => {
-                            Promise.resolve()
-                                .then(async () => {
-                                    const normalized = mokaTikTokNormalizeMaPhone(cleanPhone);
-                                    if (normalized) {
-                                        const phoneHash = await mokaTikTokSha256HexUtf8(normalized);
-                                        const externalIdHash = await mokaTikTokSha256HexUtf8(
-                                            'prumysl-moka-pro-max|' + normalized
-                                        );
-                                        if (phoneHash && externalIdHash) {
-                                            ttq.identify({
-                                                phone_number: phoneHash,
-                                                external_id: externalIdHash
-                                            });
-                                        }
-                                    }
-                                    ttq.track('Purchase', {
-                                        contents: p.contents,
-                                        value: p.value,
-                                        currency: p.currency
-                                    });
-                                })
-                                .catch((err) => {
-                                    console.warn('TikTok Purchase / identify:', err?.message || err);
-                                })
-                                .finally(() => {
-                                    clearTimeout(safetyTimer);
-                                    setTimeout(finishRedirectOnce, 400);
-                                });
-                        });
+                        window.location.href = redirectUrl;
                     });
             });
         });

@@ -30,6 +30,18 @@
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=740114099139411&ev=PageView&noscript=1"
     /></noscript>
+
+    <!-- TikTok Pixel (same as product landings) -->
+    <script>
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+    var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+    ;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+      ttq.load('D81OHIBC77UDUGTVF380');
+      ttq.page();
+    }(window, document, 'ttq');
+    </script>
+
     <style>
         body {
             background-color: #f9f9f9;
@@ -140,6 +152,37 @@
         const product = urlParams.get('product');
         const name = urlParams.get('name');
 
+        function thankYouPurchasePayload(productParam) {
+            const raw = (productParam || '').trim();
+            const unit = 699;
+            const currency = 'MAD';
+            if (raw === '2_camera') {
+                return {
+                    contentId: 'MOKA-PRO-MAX',
+                    contentName: 'Prumysl Moka Pro Max',
+                    value: unit * 2,
+                    numItems: 2,
+                    currency: currency
+                };
+            }
+            if (raw === '1_camera') {
+                return {
+                    contentId: 'MOKA-PRO-MAX',
+                    contentName: 'Prumysl Moka Pro Max',
+                    value: unit,
+                    numItems: 1,
+                    currency: currency
+                };
+            }
+            return {
+                contentId: 'PRUMYSL-ORDER',
+                contentName: raw || 'Prumysl order',
+                value: unit,
+                numItems: 1,
+                currency: currency
+            };
+        }
+
         // Update the page content dynamically
         if (product) {
             document.getElementById('product-name').textContent = product;
@@ -148,6 +191,33 @@
             // Take only the first name for a friendlier touch
             const firstName = name.split(' ')[0];
             document.getElementById('customer-name').textContent = firstName;
+        }
+
+        // Meta + TikTok Purchase (once per thank-you visit with order context)
+        if (product) {
+            const pp = thankYouPurchasePayload(product);
+            if (typeof fbq !== 'undefined') {
+                fbq('track', 'Purchase', {
+                    content_type: 'product',
+                    content_ids: [pp.contentId],
+                    currency: pp.currency,
+                    value: pp.value,
+                    num_items: pp.numItems
+                });
+            }
+            if (typeof ttq !== 'undefined') {
+                ttq.ready(function () {
+                    ttq.track('Purchase', {
+                        contents: [{
+                            content_id: pp.contentId,
+                            content_type: 'product',
+                            content_name: pp.contentName
+                        }],
+                        value: pp.value,
+                        currency: pp.currency
+                    });
+                });
+            }
         }
     </script>
 
