@@ -94,7 +94,9 @@
 
 
       ttq.load('D81OHIBC77UDUGTVF380');
-      ttq.page();
+      ttq.ready(function () {
+        ttq.page();
+      });
     }(window, document, 'ttq');
     </script>
     <!-- TikTok Pixel Code End -->
@@ -1270,30 +1272,6 @@
         // CONFIG
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyJ7pSNQtwNVKgSAz92JIMu-PZq7ffBoapou5FEQTo2W-t4Cq_chqSyCFe1HBODA4/exec";
 
-        // TikTok Pixel helpers (Moka Pro Max)
-        const MOKA_TT_CONTENT_ID = 'MOKA-PRO-MAX';
-        const MOKA_TT_CONTENT_NAME = 'Prumysl Moka Pro Max';
-        const MOKA_TT_UNIT_PRICE = 699;
-        const MOKA_TT_CURRENCY = 'MAD';
-
-        function mokaTikTokOfferFromForm(form) {
-            const offerInput = form.querySelector('input[name="product_offer"]');
-            const offer = (offerInput && offerInput.value) || '1_camera';
-            const numItems = offer === '2_camera' ? 2 : 1;
-            const value = MOKA_TT_UNIT_PRICE * numItems;
-            const contents = [{
-                content_id: MOKA_TT_CONTENT_ID,
-                content_type: 'product',
-                content_name: MOKA_TT_CONTENT_NAME
-            }];
-            return { contents, value, currency: MOKA_TT_CURRENCY, numItems };
-        }
-
-        function mokaTikTokReady(fn) {
-            if (typeof ttq === 'undefined') return;
-            ttq.ready(fn);
-        }
-
         // FAQ Accordion logic
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
@@ -1350,20 +1328,6 @@
                             content_name: 'header_to_hero_strip'
                         });
                     }
-                    mokaTikTokReady(() => {
-                        const contentName = channel === 'phone'
-                            ? 'header_to_hero_call'
-                            : 'header_to_hero_whatsapp';
-                        ttq.track('Contact', {
-                            contents: [{
-                                content_id: MOKA_TT_CONTENT_ID,
-                                content_type: 'product',
-                                content_name: contentName
-                            }],
-                            value: 0,
-                            currency: MOKA_TT_CURRENCY
-                        });
-                    });
                 });
             });
         })();
@@ -1376,7 +1340,7 @@
             });
         });
 
-        // Meta + TikTok: InitiateCheckout once per form when user focuses name / city / phone
+        // Meta Pixel: InitiateCheckout once per form when user focuses name / city / phone
         document.querySelectorAll('form.order-form').forEach(form => {
             form.addEventListener('focusin', (e) => {
                 const t = e.target;
@@ -1398,14 +1362,6 @@
                         num_items: numItems
                     });
                 }
-                mokaTikTokReady(() => {
-                    const p = mokaTikTokOfferFromForm(form);
-                    ttq.track('InitiateCheckout', {
-                        contents: p.contents,
-                        value: p.value,
-                        currency: p.currency
-                    });
-                });
             });
         });
 
