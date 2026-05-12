@@ -187,7 +187,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
             padding: 12px 12px;
             border-radius: 12px;
             font-weight: 800;
@@ -201,14 +200,13 @@
         .contact-quick-btn:hover { filter: brightness(1.06); }
         .contact-quick-btn:active { transform: scale(0.98); }
         .contact-quick-btn--call {
-            background: #202895;
-            box-shadow: 0 3px 0 #151a5e;
-        }
-        .contact-quick-btn--wa {
             background: #25D366;
             box-shadow: 0 3px 0 #1da851;
         }
-        .contact-quick-btn .cq-icon { font-size: 1.1em; line-height: 1; flex-shrink: 0; }
+        .contact-quick-btn--wa {
+            background: #202895;
+            box-shadow: 0 3px 0 #151a5e;
+        }
 
         .hero-section {
             padding-top: 20px;
@@ -944,14 +942,8 @@
 
     <div class="contact-quick-row" role="region" aria-label="تواصل سريع">
         <div class="contact-quick-inner">
-            <a class="contact-quick-btn contact-quick-btn--call" href="tel:+212723496854" dir="ltr">
-                <span class="cq-icon" aria-hidden="true">📞</span>
-                <span>اتصل بنا الآن</span>
-            </a>
-            <a class="contact-quick-btn contact-quick-btn--wa" href="https://api.whatsapp.com/send?phone=212723496854&amp;text=%D8%B3%D9%84%D8%A7%D9%85%D8%8C%20%D8%A8%D8%BA%D9%8A%D8%AA%20%D9%86%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%84%D9%89%20%D9%85%D9%86%D8%AA%D9%88%D8%AC%D8%A7%D8%AA%20Prumysl" target="_blank" rel="noopener noreferrer">
-                <span class="cq-icon" aria-hidden="true">💬</span>
-                <span>تواصل معنا على واتساب</span>
-            </a>
+            <a class="contact-quick-btn contact-quick-btn--call" href="tel:+212723496854" dir="ltr">اتصل بنا للطلب</a>
+            <a class="contact-quick-btn contact-quick-btn--wa" href="https://api.whatsapp.com/send?phone=212723496854&amp;text=%D8%B3%D9%84%D8%A7%D9%85%D8%8C%20%D8%A8%D8%BA%D9%8A%D8%AA%20%D9%86%D8%B3%D8%AA%D9%81%D8%B3%D8%B1%20%D8%B9%D9%84%D9%89%20%D9%85%D9%86%D8%AA%D9%88%D8%AC%D8%A7%D8%AA%20Prumysl" target="_blank" rel="noopener noreferrer">تواصل معنا على واتساب</a>
         </div>
     </div>
 
