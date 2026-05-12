@@ -1459,15 +1459,22 @@
                     })
                     .finally(() => {
                         let redirected = false;
+                        const p = mokaTikTokOfferFromForm(form);
                         const finishRedirectOnce = () => {
                             if (redirected) return;
                             redirected = true;
                             if (typeof fbq !== 'undefined') {
+                                fbq('track', 'Purchase', {
+                                    content_type: 'product',
+                                    content_ids: ['MOKA-PRO-MAX'],
+                                    currency: p.currency,
+                                    value: p.value,
+                                    num_items: p.numItems
+                                });
                                 fbq('track', 'Lead');
                             }
                             window.location.href = redirectUrl;
                         };
-                        const p = mokaTikTokOfferFromForm(form);
                         if (typeof ttq === 'undefined') {
                             finishRedirectOnce();
                             return;
