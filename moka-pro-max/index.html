@@ -1298,6 +1298,22 @@
             });
         })();
 
+        // Meta Pixel: every click on call / WhatsApp between header and hero (totals in Events Manager → Custom events)
+        (function () {
+            const row = document.querySelector('.contact-quick-row');
+            if (!row) return;
+            row.querySelectorAll('a.contact-quick-btn').forEach((link) => {
+                link.addEventListener('click', () => {
+                    if (typeof fbq === 'undefined') return;
+                    const channel = link.classList.contains('contact-quick-btn--call') ? 'phone' : 'whatsapp';
+                    fbq('trackCustom', 'QuickContactStripClick', {
+                        content_category: channel,
+                        content_name: 'header_to_hero_strip'
+                    });
+                });
+            });
+        })();
+
         // FORM SUBMISSION + PIXEL EVENT
         document.querySelectorAll('input[name="phone"]').forEach(phoneInput => {
             phoneInput.addEventListener('input', () => {
