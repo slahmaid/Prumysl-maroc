@@ -416,10 +416,20 @@
         @media (max-width: 768px) {
             .choice-grid { grid-template-columns: 1fr; max-width: 100%; }
             .trust-strip,
-            .trust-badges { grid-template-columns: 1fr; }
+            .trust-badges {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .trust-block { padding: 6px 4px 10px; }
+            .trust-block__media { min-height: 52px; margin-bottom: 6px; }
+            .trust-block__media img { height: clamp(40px, 11vw, 64px); }
+            .trust-block__caption { font-size: clamp(0.62rem, 2.6vw, 0.8rem); }
         }
         @media (max-width: 480px) {
             .contact-quick-inner { grid-template-columns: 1fr; }
+            .trust-strip,
+            .trust-badges { gap: 6px; }
+            .trust-block__caption { font-size: clamp(0.58rem, 2.4vw, 0.72rem); line-height: 1.35; }
         }
     </style>
 </head>
