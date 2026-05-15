@@ -1511,69 +1511,46 @@
                 sheetBody.set('quantity', String(quantity));
                 sheetBody.set('price', String(price));
 
-                const fetchWithTimeout = (url, options, timeoutMs = 8000) => {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-                    return fetch(url, { ...options, signal: controller.signal })
-                        .finally(() => clearTimeout(timeoutId));
-                };
-
-                fetchWithTimeout(SCRIPT_URL, {
+                fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: sheetBody
-                }, 8000)
-                    .catch(error => {
-                        // Slow Script endpoints are common; we still proceed to thank-you quickly.
-                        console.warn('Submit request timeout/error:', error?.message || error);
-                    })
-                    .finally(() => {
-                        if (typeof fbq !== 'undefined') {
-                            fbq('track', 'Lead');
-                        }
-                        let redirected = false;
-                        let safety = null;
-                        const go = () => {
-                            if (redirected) return;
-                            redirected = true;
-                            if (safety) clearTimeout(safety);
-                            window.location.href = redirectUrl;
-                        };
-                        const p = mokaTtqContentsPayload(product);
-                        if (typeof ttq === 'undefined' || typeof ttq.ready !== 'function') {
-                            go();
-                            return;
-                        }
-                        safety = setTimeout(go, 3500);
-                        mokaTtqReady(function () {
-                            Promise.resolve()
-                                .then(async () => {
-                                    const norm = mokaTtqNormMaPhone(cleanPhone);
-                                    if (norm) {
-                                        const phoneHash = await mokaTtqSha256HexUtf8(norm);
-                                        const extHash = await mokaTtqSha256HexUtf8('prumysl-moka|' + norm);
-                                        if (phoneHash && extHash) {
-                                            try {
-                                                sessionStorage.setItem('prumysl_ttq_ident', JSON.stringify({
-                                                    phone_number: phoneHash,
-                                                    external_id: extHash
-                                                }));
-                                            } catch (_) {}
-                                        }
-                                    }
-                                    ttq.track('PlaceAnOrder', {
-                                        contents: p.contents,
-                                        value: p.value,
-                                        currency: p.currency
-                                    });
-                                })
-                                .catch(function () {})
-                                .finally(function () {
-                                    clearTimeout(safety);
-                                    setTimeout(go, 400);
-                                });
-                        });
-                    });
+                    body: sheetBody,
+                    keepalive: true
+                }).catch(function () {});
+
+                if (typeof fbq !== 'undefined') {
+                    fbq('track', 'Lead');
+                }
+
+                const p = mokaTtqContentsPayload(product);
+                mokaTtqReady(function () {
+                    Promise.resolve()
+                        .then(async function () {
+                            const norm = mokaTtqNormMaPhone(cleanPhone);
+                            if (norm) {
+                                const phoneHash = await mokaTtqSha256HexUtf8(norm);
+                                const extHash = await mokaTtqSha256HexUtf8('prumysl-moka|' + norm);
+                                if (phoneHash && extHash) {
+                                    try {
+                                        sessionStorage.setItem('prumysl_ttq_ident', JSON.stringify({
+                                            phone_number: phoneHash,
+                                            external_id: extHash
+                                        }));
+                                    } catch (_) {}
+                                }
+                            }
+                            ttq.track('PlaceAnOrder', {
+                                contents: p.contents,
+                                value: p.value,
+                                currency: p.currency
+                            });
+                        })
+                        .catch(function () {});
+                });
+
+                setTimeout(function () {
+                    window.location.href = redirectUrl;
+                }, 450);
             });
         });
     </script>
