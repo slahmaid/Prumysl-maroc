@@ -47,6 +47,31 @@ function parsePrice_(p, quantity) {
   return UNIT_PRICE * quantity;
 }
 
+function parsePostParams_(e) {
+  var p = {};
+  if (e && e.parameter) {
+    var keys = Object.keys(e.parameter);
+    for (var i = 0; i < keys.length; i++) {
+      p[keys[i]] = e.parameter[keys[i]];
+    }
+  }
+  if (Object.keys(p).length) return p;
+
+  if (e && e.postData && e.postData.contents) {
+    var type = String(e.postData.type || '').toLowerCase();
+    if (type.indexOf('application/x-www-form-urlencoded') !== -1) {
+      var pairs = String(e.postData.contents).split('&');
+      for (var j = 0; j < pairs.length; j++) {
+        var eq = pairs[j].indexOf('=');
+        var key = decodeURIComponent((eq >= 0 ? pairs[j].substring(0, eq) : pairs[j]).replace(/\+/g, ' '));
+        var val = decodeURIComponent((eq >= 0 ? pairs[j].substring(eq + 1) : '').replace(/\+/g, ' '));
+        p[key] = val;
+      }
+    }
+  }
+  return p;
+}
+
 function doGet() {
   return ContentService.createTextOutput('Moka orders endpoint OK')
     .setMimeType(ContentService.MimeType.TEXT);
@@ -55,7 +80,7 @@ function doGet() {
 function doPost(e) {
   try {
     setupSheet();
-    var p = (e && e.parameter) ? e.parameter : {};
+    var p = parsePostParams_(e);
     var quantity = parseQuantity_(p);
     var price = parsePrice_(p, quantity);
 

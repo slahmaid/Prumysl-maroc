@@ -1496,20 +1496,33 @@
                 submitBtn.innerText = "جاري تأكيد الطلب...";
 
                 const formData = new FormData(form);
-                const name = formData.get('name');
-                const product = formData.get('product_offer');
-                const connection = formData.get('connection_type');
-                const productName = formData.get('product_name') || 'Moka Smart';
+                const name = formData.get('name') || '';
+                const city = formData.get('city') || '';
+                const product = formData.get('product_offer') || '1_camera';
+                const quantity = product === '2_camera' ? 2 : 1;
+                const price = MOKA_TTQ_UNIT * quantity;
                 const redirectUrl = `/moka/thank-you/?name=${encodeURIComponent(name)}&product=${encodeURIComponent(product)}`;
 
-                const fetchWithTimeout = (url, options, timeoutMs = 2500) => {
+                const sheetBody = new URLSearchParams();
+                sheetBody.set('name', name);
+                sheetBody.set('city', city);
+                sheetBody.set('phone', cleanPhone);
+                sheetBody.set('product_offer', product);
+                sheetBody.set('quantity', String(quantity));
+                sheetBody.set('price', String(price));
+
+                const fetchWithTimeout = (url, options, timeoutMs = 8000) => {
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
                     return fetch(url, { ...options, signal: controller.signal })
                         .finally(() => clearTimeout(timeoutId));
                 };
 
-                fetchWithTimeout(SCRIPT_URL, { method: 'POST', body: formData }, 2500)
+                fetchWithTimeout(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: sheetBody
+                }, 8000)
                     .catch(error => {
                         // Slow Script endpoints are common; we still proceed to thank-you quickly.
                         console.warn('Submit request timeout/error:', error?.message || error);
