@@ -968,6 +968,139 @@
         .mobile-cta .cta-btn:active { transform: translateY(1px); box-shadow: 0 2px 0 #1e7e34; }
 
         html { scroll-behavior: smooth; }
+
+        .moka-page img[loading="lazy"] { opacity: 1; }
+
+        @media (min-width: 1024px) {
+            .moka-page .container,
+            .header-inner,
+            .contact-quick-inner {
+                max-width: 1240px;
+            }
+            .moka-page .container { padding: 0 24px; }
+
+            .top-bar { font-size: 1rem; padding: 12px 16px; }
+
+            .contact-quick-inner {
+                max-width: 720px;
+                gap: 14px;
+            }
+            .contact-quick-btn {
+                font-size: 1rem;
+                padding: 14px 20px;
+                border-radius: 14px;
+            }
+
+            .desktop-fold {
+                display: grid;
+                grid-template-columns: minmax(0, 1.1fr) minmax(400px, 0.9fr);
+                gap: 48px;
+                align-items: start;
+                max-width: 1240px;
+                margin: 0 auto;
+                padding: 40px 24px 56px;
+                background: linear-gradient(165deg, #f6f7fc 0%, var(--bg-light) 55%, #fff 100%);
+            }
+
+            .desktop-fold .hero-section {
+                padding: 0;
+                text-align: center;
+            }
+            .desktop-fold .hero-section img {
+                max-width: 100%;
+                border-radius: 24px;
+                box-shadow: 0 28px 60px rgba(32, 40, 149, 0.16);
+            }
+
+            .desktop-fold .order-section {
+                padding: 0;
+                background: transparent;
+            }
+            .desktop-fold .order-section .container {
+                max-width: none;
+                padding: 0;
+            }
+
+            .desktop-fold .order-title {
+                text-align: right;
+                font-size: 2.05rem;
+                margin-bottom: 14px;
+            }
+            .desktop-fold .order-title.seo-main-heading .seo-h1-product {
+                max-width: none;
+                margin: 0 0 16px 0;
+                text-align: right;
+                font-size: 1.08rem;
+                line-height: 1.65;
+            }
+            .desktop-fold .order-title.seo-main-heading .seo-h1-cta {
+                text-align: right;
+            }
+            .desktop-fold .order-subtitle {
+                text-align: right;
+                font-size: 1.08rem;
+                line-height: 1.75;
+                margin-bottom: 22px;
+            }
+            .desktop-fold .urgency-box {
+                text-align: right;
+                padding: 18px 20px;
+            }
+
+            .desktop-fold .order-form {
+                position: sticky;
+                top: 96px;
+                padding: 32px 28px;
+                border: 1px solid rgba(32, 40, 149, 0.1);
+                box-shadow: 0 20px 48px rgba(32, 40, 149, 0.1);
+            }
+
+            .desktop-form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+            .desktop-form-row .form-group { margin-bottom: 0; }
+
+            .features-section,
+            .reviews-section,
+            .gallery-section,
+            .faq-section {
+                padding: 72px 0;
+            }
+            .section-divider h2 { font-size: 2.1rem; }
+            .features-grid { gap: 36px; }
+            .feature-box h3 { font-size: 1.2rem; }
+            .feature-box p { font-size: 0.95rem; line-height: 1.65; }
+
+            .specs-table-wrap { max-width: 880px; }
+            .specs-table { font-size: 1rem; }
+
+            .reviews-wrapper {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+            }
+            .review-card { padding: 26px; }
+
+            .gallery-grid { gap: 24px; }
+            .gallery-item { border-radius: 18px; }
+
+            .faq-section .container { max-width: 920px; }
+            .faq-question { font-size: 1.12rem; padding: 22px 28px; }
+
+            .retarget-section { padding: 72px 0; }
+            .retarget-section .container { max-width: 560px; }
+            .retarget-section .order-title,
+            .retarget-section .order-subtitle { text-align: right; }
+            .retarget-section .order-form { padding: 32px 28px; }
+
+            .trust-badges {
+                max-width: 920px;
+                gap: 28px;
+            }
+            .badge-item { font-size: 1rem; }
+            .badge-icon { font-size: 2.4rem; }
+        }
     </style>
 </head>
 <body class="moka-page">
@@ -995,6 +1128,7 @@
     </div>
 
     <main id="main-content">
+    <div class="desktop-fold">
     <section class="hero-section">
         <a href="#order" aria-label="الانتقال إلى نموذج الطلب">
             <picture>
@@ -1027,13 +1161,15 @@
                 <input type="hidden" name="product_sku" value="MOKA-4G-DUAL">
                 <input type="hidden" name="landing_page" value="moka">
 
-                <div class="form-group">
-                    <label>الاسم الكامل</label>
-                    <input type="text" name="name" placeholder="الاسم الكامل">
-                </div>
-                <div class="form-group">
-                    <label>المدينة</label>
-                    <input type="text" name="city" placeholder="المدينة">
+                <div class="desktop-form-row">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" name="name" placeholder="الاسم الكامل">
+                    </div>
+                    <div class="form-group">
+                        <label>المدينة</label>
+                        <input type="text" name="city" placeholder="المدينة">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>رقم الهاتف</label>
@@ -1048,6 +1184,7 @@
             </form>
         </div>
     </section>
+    </div>
 
     <section class="features-section">
         <div class="container">
@@ -1249,20 +1386,22 @@
                 مراقبة <b>4G</b> بعدستين و<b>V380 Pro</b> — مناسبة للدار، الفيلا والضيعة؛ متابعة مباشرة من الهاتف.
             </p>
 
-            <form class="order-form" id="retarget-order-form">
+            <form class="order-form order-form--retarget" id="retarget-order-form">
                 <input type="hidden" name="connection_type" value="4G SIM">
                 <input type="hidden" name="product_offer" value="1_camera">
                 <input type="hidden" name="product_name" value="Moka Smart">
                 <input type="hidden" name="product_sku" value="MOKA-4G-DUAL">
                 <input type="hidden" name="landing_page" value="moka">
 
-                <div class="form-group">
-                    <label>الاسم الكامل</label>
-                    <input type="text" name="name" placeholder="أدخل اسمك هنا">
-                </div>
-                <div class="form-group">
-                    <label>المدينة</label>
-                    <input type="text" name="city" placeholder="مدينتك">
+                <div class="desktop-form-row">
+                    <div class="form-group">
+                        <label>الاسم الكامل</label>
+                        <input type="text" name="name" placeholder="أدخل اسمك هنا">
+                    </div>
+                    <div class="form-group">
+                        <label>المدينة</label>
+                        <input type="text" name="city" placeholder="مدينتك">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>رقم الهاتف</label>
