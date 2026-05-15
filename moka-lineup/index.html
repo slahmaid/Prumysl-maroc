@@ -272,6 +272,10 @@
             object-fit: cover;
             display: block;
         }
+        /* style.css hides lazy images until .loaded; this page has no loader script */
+        .moka-lineup-page img[loading="lazy"] {
+            opacity: 1;
+        }
         .choice-body { padding: 18px 18px 20px; flex: 1; display: flex; flex-direction: column; }
         .choice-title { font-size: 1.25rem; font-weight: 900; color: #111; margin-bottom: 6px; }
         .choice-price {
@@ -513,7 +517,7 @@
                     <article class="choice-card choice-card--featured">
                         <span class="choice-badge">تخفيض</span>
                         <div class="choice-thumb">
-                            <img src="../img/Hero.jpeg" alt="كاميرا موكا برو ماكس — ثلاث عدسات" width="640" height="400" loading="lazy" decoding="async">
+                            <img src="/img/Hero.jpeg" alt="كاميرا موكا برو ماكس — ثلاث عدسات" width="640" height="400" loading="eager" decoding="async" fetchpriority="high">
                         </div>
                         <div class="choice-body">
                             <h2 class="choice-title">كاميرا موكا برو ماكس</h2>
@@ -590,5 +594,12 @@
         target="_blank" rel="noopener noreferrer"
         aria-label="تواصل عبر واتساب"
         title="واتساب"><img src="../img/whatsapp.png" alt="WhatsApp" width="56" height="56"></a>
+
+    <script>
+        document.querySelectorAll('img').forEach(function (img) {
+            img.style.opacity = '1';
+            img.classList.add('loaded');
+        });
+    </script>
 </body>
 </html>
