@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
 
-    <title>شكراً لطلبك | Prumysl</title>
-    <meta name="description" content="تم استلام طلبك بنجاح. سيتواصل معك فريق Prumysl قريباً لتأكيد الطلب.">
+    <title>شكراً لطلبك | بروجيكتور Prumysl</title>
+    <meta name="description" content="تم استلام طلب البروجيكتور بنجاح. سيتواصل معك فريق Prumysl قريباً لتأكيد الطلب.">
 
     <meta name="theme-color" content="#202895">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
 
     <script>
     !function(f,b,e,v,n,t,s)
@@ -46,7 +46,6 @@
             --accent-blue: #202895;
             --success-green: #28a745;
             --bg-light: #f8f9fa;
-            --danger-red: #e63946;
             --soft-blue: #f4f5ff;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
@@ -185,8 +184,10 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0,0,0,.08);
+            aspect-ratio: 1;
+            background: #eee;
         }
-        .product-thumb img { width: 100%; height: auto; display: block; }
+        .product-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         footer {
             background: #fff;
@@ -214,7 +215,7 @@
     <header>
         <div class="header-inner">
             <a href="/" class="logo-container" aria-label="Prumysl">
-                <img src="/img/logo.svg" alt="Prumysl" width="140" height="46">
+                <img src="../../img/logo.svg" alt="Prumysl" width="140" height="46">
             </a>
         </div>
     </header>
@@ -225,12 +226,12 @@
                 <div class="success-icon" aria-hidden="true">✓</div>
                 <h1 id="thankTitle">شكراً لك!</h1>
                 <p class="lead" id="thankLead">
-                    تم استلام طلبك بنجاح. سيتصل بك فريقنا في أقرب وقت
+                    تم استلام طلب البروجيكتور بنجاح. سيتصل بك فريقنا في أقرب وقت
                     <strong>(غالباً خلال 24 ساعة)</strong> لتأكيد العنوان وموعد التوصيل.
                 </p>
 
                 <div class="product-thumb" id="productThumb">
-                    <img id="productThumbImg" src="/img/saqr/Saqr.jpeg" alt="" width="280" height="187">
+                    <img id="productThumbImg" src="../../img/projectors/300W.webp" alt="بروجيكتور Prumysl الشمسي" width="280" height="280" onerror="this.onerror=null;this.src='https://slahmaid.github.io/ARVADIS/img/Projectors/300W.webp'">
                 </div>
 
                 <div class="order-summary" id="orderSummary">
@@ -245,7 +246,7 @@
                     </div>
                     <div class="summary-row">
                         <span>الكمية</span>
-                        <span id="summaryQty">1</span>
+                        <span id="summaryQty">1 بروجيكتور</span>
                     </div>
                     <div class="summary-row summary-row--total">
                         <span>المجموع (الدفع عند الاستلام)</span>
@@ -259,38 +260,28 @@
                         <li>غادي نعاودو نتاصلوا بيك على الهاتف لتأكيد الطلب</li>
                         <li>التوصيل مجاني لجميع مدن المغرب</li>
                         <li>كتخلّص غير ملي توصلك الطلبية — الدفع عند الاستلام</li>
+                        <li>ضمان 3 سنوات على البروجيكتور</li>
                     </ul>
                 </div>
 
                 <div class="cta-row">
                     <a class="cta-btn cta-btn--wa" id="waLink" href="https://api.whatsapp.com/send?phone=212723496854" target="_blank" rel="noopener noreferrer">تواصل عبر واتساب</a>
                     <a class="cta-btn cta-btn--call" href="tel:+212723496854" dir="ltr">اتصل بنا</a>
-                    <a class="cta-btn cta-btn--back" id="backLink" href="/">العودة للمتجر</a>
+                    <a class="cta-btn cta-btn--back" href="/projectors/">العودة لصفحة البروجيكتورات</a>
                 </div>
             </div>
         </div>
     </main>
 
     <footer>
-        <img src="/img/logo.svg" alt="Prumysl" class="footer-logo" width="120" height="40">
+        <img src="../../img/logo.svg" alt="Prumysl" class="footer-logo" width="120" height="40">
         <p class="copyright">&copy; 2026 Prumysl. جميع الحقوق محفوظة.</p>
     </footer>
 
     <script>
-        const SAQR_UNIT = 1999;
-        const MOKA_UNIT = 699;
-        const PROJECTOR_300 = 699;
-        const PROJECTOR_400 = 799;
-        const PRODUCT_META = {
-            saqr: { label: 'كاميرا الصقر — 4G', contentId: 'SAQR-36X-4G', unit: SAQR_UNIT, back: '/saqr/', thumb: '/img/saqr/Saqr.jpeg', thumbAlt: 'كاميرا Prumysl الصقر', isSaqr: true },
-            saqr_4g: { label: 'كاميرا الصقر — 4G', contentId: 'SAQR-36X-4G', unit: SAQR_UNIT, back: '/saqr/', thumb: '/img/saqr/Saqr.jpeg', thumbAlt: 'كاميرا Prumysl الصقر', isSaqr: true },
-            '1_camera': { label: 'Moka Pro Max', contentId: 'MOKA-PRO-MAX', unit: MOKA_UNIT, back: '/moka-pro-max/', thumb: '/img/MOKA.jpg', thumbAlt: 'Moka Pro Max', isSaqr: false },
-            '2_camera': { label: 'Moka Pro Max (×2)', contentId: 'MOKA-PRO-MAX', unit: MOKA_UNIT * 2, back: '/moka-pro-max/', thumb: '/img/MOKA.jpg', thumbAlt: 'Moka Pro Max', isSaqr: false },
-            'moka-pro-max': { label: 'Moka Pro Max', contentId: 'MOKA-PRO-MAX', unit: MOKA_UNIT, back: '/moka-pro-max/', thumb: '/img/MOKA.jpg', thumbAlt: 'Moka Pro Max', isSaqr: false },
-            projectors: { label: 'بروجيكتور شمسي', contentId: 'PROJECTOR-SOLAR', unit: PROJECTOR_300, back: '/projectors/', thumb: '/img/projectors/300W.webp', thumbAlt: 'بروجيكتور Prumysl الشمسي', isSaqr: false },
-            projector: { label: 'بروجيكتور شمسي', contentId: 'PROJECTOR-SOLAR', unit: PROJECTOR_300, back: '/projectors/', thumb: '/img/projectors/300W.webp', thumbAlt: 'بروجيكتور Prumysl الشمسي', isSaqr: false },
-            '300w': { label: 'بروجيكتور شمسي 300 واط', contentId: 'PROJECTOR-300W', unit: PROJECTOR_300, back: '/projectors/', thumb: '/img/projectors/300W.webp', thumbAlt: 'بروجيكتور 300W', isSaqr: false },
-            '400w': { label: 'بروجيكتور شمسي 400 واط', contentId: 'PROJECTOR-400W', unit: PROJECTOR_400, back: '/projectors/', thumb: '/img/projectors/400W.webp', thumbAlt: 'بروجيكتور 400W', isSaqr: false }
+        const MODELS = {
+            '300w': { label: 'بروجيكتور شمسي 300 واط', contentId: 'PROJECTOR-300W', unit: 699, thumb: '../../img/projectors/300W.webp', thumbFallback: 'https://slahmaid.github.io/ARVADIS/img/Projectors/300W.webp' },
+            '400w': { label: 'بروجيكتور شمسي 400 واط', contentId: 'PROJECTOR-400W', unit: 799, thumb: '../../img/projectors/400W.webp', thumbFallback: 'https://slahmaid.github.io/ARVADIS/img/Projectors/400W.webp' }
         };
 
         function getParams() {
@@ -303,56 +294,37 @@
             return num.toLocaleString('ar-MA') + ' درهم';
         }
 
-        function resolveProduct(raw) {
-            const key = (raw || 'saqr').trim().toLowerCase();
-            if (PRODUCT_META[key]) return { key: key, ...PRODUCT_META[key] };
-            if (key.includes('saqr')) return { key: 'saqr', ...PRODUCT_META.saqr };
-            if (key.includes('projector') || key === '300w' || key === '400w') {
-                if (PRODUCT_META[key]) return { key: key, ...PRODUCT_META[key] };
-                return { key: 'projectors', ...PRODUCT_META.projectors };
-            }
-            if (key.includes('moka') || key === '1_camera' || key === '2_camera') {
-                return { key: key, ...PRODUCT_META['1_camera'] };
-            }
-            return { key: key, label: raw || 'طلب Prumysl', contentId: 'PRUMYSL-ORDER', unit: SAQR_UNIT, back: '/', thumb: '', thumbAlt: '', isSaqr: false };
+        function resolveModel(raw) {
+            const key = (raw || '300w').trim().toLowerCase();
+            return MODELS[key] ? key : '300w';
         }
 
-        function purchasePayload(meta, qty, priceOverride) {
-            let qtyNum = Math.max(1, parseInt(qty, 10) || 1);
+        function purchasePayload(modelKey, qty, priceOverride) {
+            const m = MODELS[modelKey] || MODELS['300w'];
+            const qtyNum = Math.max(1, parseInt(qty, 10) || 1);
             let value = parseInt(priceOverride, 10);
             if (!value || Number.isNaN(value)) {
-                if (meta.key === '2_camera') {
-                    value = MOKA_UNIT * 2;
-                    qtyNum = 2;
-                } else if (meta.isSaqr) {
-                    value = SAQR_UNIT * qtyNum;
-                } else if (meta.key === '1_camera') {
-                    value = MOKA_UNIT;
-                } else {
-                    value = (meta.unit || SAQR_UNIT) * qtyNum;
-                }
+                value = m.unit * qtyNum;
             }
             return {
-                contentId: meta.contentId,
-                contentName: meta.label,
+                contentId: m.contentId,
+                contentName: m.label,
                 value: value,
                 numItems: qtyNum,
-                currency: 'MAD'
+                currency: 'MAD',
+                model: modelKey
             };
         }
 
         function initThankYou() {
             const p = getParams();
             const name = (p.get('name') || '').trim();
-            const productRaw = p.get('product') || 'saqr';
-            const modelRaw = (p.get('model') || '').trim().toLowerCase();
-            let meta = resolveProduct(modelRaw && PRODUCT_META[modelRaw] ? modelRaw : productRaw);
-            if (modelRaw && (modelRaw === '300w' || modelRaw === '400w')) {
-                meta = { key: modelRaw, ...PRODUCT_META[modelRaw] };
-            }
-            const qty = p.get('quantity') || (meta.key === '2_camera' ? '2' : '1');
+            const modelKey = resolveModel(p.get('model') || '300w');
+            const m = MODELS[modelKey];
+            const qty = p.get('quantity') || '1';
             const priceParam = p.get('price') || '';
-            const pp = purchasePayload(meta, qty, priceParam);
+            const pp = purchasePayload(modelKey, qty, priceParam);
+            const qtyNum = pp.numItems;
 
             if (name) {
                 document.getElementById('thankTitle').textContent = 'شكراً لك يا ' + name.split(' ')[0] + '!';
@@ -360,43 +332,23 @@
                 document.getElementById('summaryNameRow').hidden = false;
             }
 
-            document.getElementById('summaryProduct').textContent = meta.label;
-            const qtyNum = pp.numItems;
-            const qtyUnit = (meta.key === 'projectors' || meta.key === 'projector' || meta.key === '300w' || meta.key === '400w')
-                ? (qtyNum === 1 ? ' بروجيكتور' : ' بروجيكتورات')
-                : (qtyNum === 1 ? ' كاميرا' : ' كاميرات');
-            document.getElementById('summaryQty').textContent = qtyNum + qtyUnit;
+            document.getElementById('summaryProduct').textContent = m.label;
+            document.getElementById('summaryQty').textContent = qtyNum + (qtyNum === 1 ? ' بروجيكتور' : ' بروجيكتورات');
             document.getElementById('summaryPrice').textContent = formatPrice(pp.value);
 
-            const backLink = document.getElementById('backLink');
-            backLink.href = meta.back;
-            if (meta.isSaqr) {
-                backLink.textContent = 'العودة لصفحة الصقر';
-            } else if (meta.key === 'projectors' || meta.key === 'projector' || meta.key === '300w' || meta.key === '400w') {
-                backLink.textContent = 'العودة لصفحة البروجيكتورات';
-            } else {
-                backLink.textContent = 'العودة لصفحة المنتج';
-            }
-
-            const thumb = document.getElementById('productThumb');
             const thumbImg = document.getElementById('productThumbImg');
-            if (meta.thumb && thumbImg) {
-                thumbImg.src = meta.thumb;
-                thumbImg.alt = meta.thumbAlt;
-            } else if (thumb) {
-                thumb.style.display = 'none';
-            }
-
-            if (meta.isSaqr) {
-                const gift = document.createElement('li');
-                gift.textContent = '🎁 بطاقة SD هدية مع كاميرا الصقر';
-                document.getElementById('stepsList').appendChild(gift);
-            }
+            thumbImg.src = m.thumb;
+            thumbImg.alt = m.label;
+            thumbImg.onerror = function () {
+                this.onerror = null;
+                this.src = m.thumbFallback;
+            };
 
             const waText = encodeURIComponent(
-                'سلام، أكدت طلبي دابا — ' + meta.label +
+                'سلام، أكدت طلب البروجيكتور دابا — ' + m.label +
                 (name ? ' (الاسم: ' + name + ')' : '') +
-                ' — الكمية: ' + qtyNum
+                ' — الكمية: ' + qtyNum +
+                ' — المجموع: ' + pp.value + ' درهم'
             );
             document.getElementById('waLink').href =
                 'https://api.whatsapp.com/send?phone=212723496854&text=' + waText;
@@ -415,9 +367,9 @@
             if (typeof ttq !== 'undefined' && typeof ttq.ready === 'function') {
                 ttq.ready(function () {
                     try {
-                        const idRaw = sessionStorage.getItem('prumysl_ttq_ident');
+                        var idRaw = sessionStorage.getItem('prumysl_ttq_ident');
                         if (idRaw) {
-                            const o = JSON.parse(idRaw);
+                            var o = JSON.parse(idRaw);
                             ttq.identify({
                                 phone_number: o.phone_number,
                                 external_id: o.external_id
@@ -426,16 +378,11 @@
                         }
                     } catch (_) {}
 
-                    const contents = [{ content_id: pp.contentId, content_type: 'product', content_name: pp.contentName }];
-                    const payload = { contents: contents, value: pp.value, currency: pp.currency };
-
-                    if (meta.isSaqr) {
-                        ttq.track('CompletePayment', payload);
-                    } else {
-                        ttq.track('ViewContent', payload);
-                        ttq.track('AddPaymentInfo', payload);
-                        ttq.track('Purchase', payload);
-                    }
+                    var contents = [{ content_id: pp.contentId, content_type: 'product', content_name: pp.contentName }];
+                    var payload = { contents: contents, value: pp.value, currency: pp.currency };
+                    ttq.track('ViewContent', payload);
+                    ttq.track('AddPaymentInfo', payload);
+                    ttq.track('Purchase', payload);
                 });
             }
         }
