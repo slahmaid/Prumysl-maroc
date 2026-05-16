@@ -8,10 +8,33 @@
  * 4. Deploy → New deployment → Web app:
  *    - Execute as: Me
  *    - Who has access: Anyone
- * 5. Copy the /exec URL into saqr.html → SCRIPT_URL
+ * 5. Copy the /exec URL into saqr/index.html → SCRIPT_URL
  */
 
 const SHEET_NAME = 'Saqr Orders';
+
+function parsePostParams_(e) {
+  const p = {};
+  if (e && e.parameter) {
+    Object.keys(e.parameter).forEach((key) => {
+      p[key] = e.parameter[key];
+    });
+  }
+  if (Object.keys(p).length) return p;
+
+  if (e && e.postData && e.postData.contents) {
+    const type = String(e.postData.type || '').toLowerCase();
+    if (type.indexOf('application/x-www-form-urlencoded') !== -1) {
+      String(e.postData.contents).split('&').forEach((pair) => {
+        const eq = pair.indexOf('=');
+        const key = decodeURIComponent((eq >= 0 ? pair.substring(0, eq) : pair).replace(/\+/g, ' '));
+        const val = decodeURIComponent((eq >= 0 ? pair.substring(eq + 1) : '').replace(/\+/g, ' '));
+        p[key] = val;
+      });
+    }
+  }
+  return p;
+}
 
 function setupSheet() {
   const sheet = getOrCreateSheet_();
@@ -37,7 +60,7 @@ function doGet() {
 
 function doPost(e) {
   try {
-    const p = e && e.parameter ? e.parameter : {};
+    const p = parsePostParams_(e);
     const sheet = getOrCreateSheet_();
 
     if (sheet.getLastRow() === 0) {

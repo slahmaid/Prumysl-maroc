@@ -730,8 +730,8 @@
     </div>
 
     <script>
-        // CONFIG — deploy saqr-sheet/Code.gs as Web App, then paste the /exec URL here
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyJ7pSNQtwNVKgSAz92JIMu-PZq7ffBoapou5FEQTo2W-t4Cq_chqSyCFe1HBODA4/exec";
+        // CONFIG — paste google-apps-script/saqr-orders.gs into Apps Script, deploy Web App, then paste /exec URL here
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhVcHINSHeNQZb6hvrgpbP7YUtBdcejSzSjiMu5dZat7voCIoVzFCATnm9QHHD_Pc/exec";
 
         const SAQR_CONTENT_ID = 'SAQR-36X-4G';
         const SAQR_UNIT_PRICE = 1999;
@@ -876,21 +876,26 @@
                 submitBtn.innerText = 'جاري تأكيد الطلب...';
 
                 const formData = new FormData(form);
-                const name = formData.get('name');
-                const redirectUrl = `/thank-you/?name=${encodeURIComponent(name)}&product=saqr&quantity=${encodeURIComponent(formData.get('quantity') || '1')}&price=${encodeURIComponent(formData.get('price') || '1999')}`;
+                const name = formData.get('name') || '';
+                const quantity = formData.get('quantity') || '1';
+                const price = formData.get('price') || '1999';
+                const redirectUrl = `/thank-you/?name=${encodeURIComponent(name)}&product=saqr&quantity=${encodeURIComponent(quantity)}&price=${encodeURIComponent(price)}`;
 
-                const fetchWithTimeout = (url, options, timeoutMs = 2500) => {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-                    return fetch(url, { ...options, signal: controller.signal })
-                        .finally(() => clearTimeout(timeoutId));
-                };
+                const sheetBody = new URLSearchParams();
+                sheetBody.set('name', name);
+                sheetBody.set('city', formData.get('city') || '');
+                sheetBody.set('phone', cleanPhone);
+                sheetBody.set('quantity', quantity);
+                sheetBody.set('price', price);
 
-                fetchWithTimeout(SCRIPT_URL, { method: 'POST', body: formData }, 2500)
-                    .catch(error => console.warn('Submit request timeout/error:', error?.message || error))
-                    .finally(() => {
-                        window.location.href = redirectUrl;
-                    });
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: sheetBody,
+                    keepalive: true
+                }).catch(function () {});
+
+                window.location.href = redirectUrl;
             });
         });
     </script>
